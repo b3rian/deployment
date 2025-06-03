@@ -29,5 +29,9 @@ with st.form("transaction_form"):
                                 columns=["Date", "Type", "Category", "Amount", "Description"])
         st.session_state['transanctions'] = pd.concat([st.session_state['transanctions'], new_transaction], ignore_index=True)
         st.success("Transaction added successfully!")
+
+# Display transactions
+st.subheader("📊 Transactions Overview")
+st.dataframe(st.session_state['transanctions'], use_container_width=True)
  
 
