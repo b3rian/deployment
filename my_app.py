@@ -1,41 +1,33 @@
 """
-# my first app in streamlit
+# Budget Tracker App
 """
 import streamlit as st
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
-# set the title of the app
-st.title('Uber pickups in NYC')
+# Title of the app
+st.title("💰 Personal Budget Tracker App")
 
-DATE_COLUMN = 'date/time'
-DATA_URL = ('https://s3-us-west-2.amazonaws.com/'
-            'streamlit-demo-data/uber-raw-data-sep14.csv.gz')
+# Initialize session state for transactions if not already done
+if 'transanctions' not in st.session_state:
+    st.session_state['transanctions'] = pd.DataFrame(columns=['Date', 'Type', 'Category', 
+                                                              'Amount', 'Description'])
+ 
+# User transactions data
+st.subheader("➕ Add New Transaction")
+with st.form("transaction_form"):
+    date = st.date_input("Date")
+    t_type = st.selectbox("Type", ["Income", "Expense"])
+    category = st.text_input("Category")
+    amount = st.number_input("Amount", min_value=0.0, step =0.01)
+    description = st.text_input("Description")
+    submitted = st.form_submit_button("Add Transaction")
 
-@st.cache_data
-def load_data(nrows):
-    data = pd.read_csv(DATA_URL, nrows=nrows)
-    lowercase = lambda x: str(x).lower()
-    data.rename(lowercase, axis='columns', inplace=True)
-    data[DATE_COLUMN] = pd.to_datetime(data[DATE_COLUMN])
-    return data
-
-data_load_state = st.text('Loading data...')
-data = load_data(10000)
-data_load_state.text("Done! (using st.cache_data)")
-
-if st.checkbox('Show raw data'):
-    st.subheader('Raw data')
-    st.write(data)
-
-st.subheader('Number of pickups by hour')
-hist_values = np.histogram(data[DATE_COLUMN].dt.hour, bins=24, range=(0,24))[0]
-st.bar_chart(hist_values)
-
-# Some number in the range 0-23
-hour_to_filter = st.slider('hour', 0, 23, 17)
-filtered_data = data[data[DATE_COLUMN].dt.hour == hour_to_filter]
-
-st.subheader('Map of all pickups at %s:00' % hour_to_filter)
-st.map(filtered_data)
+    if submitted:
+        new_transaction = pd.DataFrame([[date, t_type, category, amount, description]],
+                                columns=["Date", "Type", "Category", "Amount", "Description"])
+        st.session_state['transanctions'] = pd.concat([st.session_state['transanctions'], new_transaction], ignore_index=True)
+        st.success("Transaction added successfully!")
+ 
 
