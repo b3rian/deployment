@@ -10,8 +10,8 @@ import matplotlib.pyplot as plt
 st.title("💰 Personal Budget Tracker App")
 
 # Initialize session state for transactions if not already done
-if 'transanctions' not in st.session_state:
-    st.session_state['transanctions'] = pd.DataFrame(columns=['Date', 'Type', 'Category', 
+if 'transactions' not in st.session_state:
+    st.session_state['transactions'] = pd.DataFrame(columns=['Date', 'Type', 'Category', 
                                                               'Amount', 'Description'])
  
 # User transactions data
@@ -27,11 +27,11 @@ with st.form("transaction_form"):
     if submitted:
         new_transaction = pd.DataFrame([[date, t_type, category, amount, description]],
                                 columns=["Date", "Type", "Category", "Amount", "Description"])
-        st.session_state['transanctions'] = pd.concat([st.session_state['transanctions'], new_transaction], ignore_index=True)
+        st.session_state['transactions'] = pd.concat([st.session_state['transactions'], new_transaction], ignore_index=True)
         st.success("Transaction added successfully!")
 
 # Display transactions
 st.subheader("📊 Transactions Overview")
-st.dataframe(st.session_state['transanctions'], use_container_width=True)
+st.dataframe(st.session_state['transactions'], use_container_width=True)
  
 
