@@ -32,6 +32,7 @@ with st.form("transaction_form"):
 
 # Display transactions
 st.subheader("📊 Transactions Overview")
+st.session_state['transactions']['Date'] = pd.to_datetime(st.session_state['transactions']['Date'])
 st.dataframe(st.session_state['transactions'], use_container_width=True)
 
 # Summary
