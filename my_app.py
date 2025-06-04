@@ -2,10 +2,10 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-st.set_page_config(page_title="Personal Budget Tracker", layout="wide")
+st.set_page_config (page_title="Personal Budget Tracker", layout="wide")
 
 # Sidebar
-st.sidebar.title("Navigation")
+st.sidebar.title ("Navigation")
 page = st.sidebar.radio("Go to", ["Add Transaction", "View Summary", "Upload/Download Data", "About"])
 
 # Initialize session state
