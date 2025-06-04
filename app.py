@@ -66,5 +66,10 @@ if not df.empty:
 else:
     st.info("No transactions yet.")
 
+st.subheader("📤 Export Data")
+csv = df.to_csv(index=False)
+st.download_button("Download as CSV", csv, file_name="budget_data.csv", mime="text/csv")
+
+
  
 
