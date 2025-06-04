@@ -1,16 +1,23 @@
 from fastapi import FastAPI
 import pandas as pd
 import joblib
+from pydantic import BaseModel
+import numpy as np
 
 app = FastAPI() 
-model = joblib.load('house_prediction.pkl') # loading the model
+model = joblib.load('model.pkl') # loading the trained model
 
-@app.get('/predict_price/')
-async def predict_price(bedrooms : int, bathrooms: int, sqft : int):
-    features = pd.DataFrame([[bedrooms, bathrooms, sqft]],
-                            columns=["bedrooms", "bathrooms", "sqft"])
-    price = model.predict(features)[0]
-    return{'predicted price' : price}
+class InputData(BaseModel):
+    age : int
+    salary : float
+
+@app.post('/predict')
+async def predict(data : InputData):
+    input_array = np.array([[data.age, data.salary]])
+    prediction = model.predict(input_array)[0]
+    return {'prediction' : int(prediction)}
+
+ 
 
 
  
