@@ -33,5 +33,37 @@ with st.form("transaction_form"):
 # Display transactions
 st.subheader("📊 Transactions Overview")
 st.dataframe(st.session_state['transactions'], use_container_width=True)
+
+# Summary
+st.subheader("📈 Summary")
+
+df = st.session_state['transactions']
+
+if not df.empty:
+    total_income = df[df["Type"] == "Income"]["Amount"].sum()
+    total_expense = df[df["Type"] == "Expense"]["Amount"].sum()
+    balance = total_income - total_expense
+
+    st.metric("Total Income", f"KES {total_income:,.2f}")
+    st.metric("Total Expense", f"KES {total_expense:,.2f}")
+    st.metric("Net Balance", f"KES {balance:,.2f}")
+
+    # Visualization
+    st.subheader("📊 Expense Distribution by Category")
+    expense_df = df[df["Type"] == "Expense"]
+    if not expense_df.empty:
+        pie_data = expense_df.groupby("Category")["Amount"].sum()
+        fig, ax = plt.subplots()
+        ax.pie(pie_data, labels=pie_data.index, autopct='%1.1f%%', startangle=90)
+        ax.axis('equal')
+        st.pyplot(fig)
+
+    st.subheader("📅 Spending Over Time")
+    df['Date'] = pd.to_datetime(df['Date'])
+    time_summary = df.groupby(['Date', 'Type'])["Amount"].sum().unstack(fill_value=0)
+    st.line_chart(time_summary)
+else:
+    st.info("No transactions yet.")
+
  
 
