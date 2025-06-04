@@ -74,7 +74,7 @@ st.subheader("📥 Upload CSV")
 uploaded_file = st.file_uploader("Choose a CSV file")
 if uploaded_file is not None:
     df_upload = pd.read_csv(uploaded_file)
-    st.session_state['transactions'] = pd.concat([st.session_state['transactions'], df_upload], ignore_index=True)
+    st.session_state ['transactions'] = pd.concat([st.session_state['transactions'], df_upload], ignore_index=True)
     st.success("Data uploaded successfully!")
 
 
