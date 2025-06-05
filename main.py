@@ -8,18 +8,24 @@ from typing import Annotated, Optional
 app = FastAPI() 
 model = joblib.load('model.pkl') # loading the trained model
 
+# Define the request model
 class InputData(BaseModel):
-    sepal_length: float = Field(..., gt = 0, example = 2.1)
-    sepal_width: float = Field(..., gt = 0, example = 5.1)
-    petal_length: float = Field(..., gt = 0, examples=3.0)
-    petal_length: float = Field(..., gt = 0)
+    feature_1: float = Field (..., description="Sepal Length")
+    feature_2: float = Field(..., description="Sepal Width")
+    feature_3: float = Field(..., description="Petal Length")
+    feature_4: float = Field(..., description="Petal Width")
+     
+# Define the response model
+class PredictionResponse(BaseModel):
+    prediction: int = Field(..., description="Predicted class label")
+    confidence: float = Field(..., description="Confidence score of the prediction")
 
-@app.post('/predict/')
-async def predict(data : InputData, user_agent : Annotated[str, Header()] = None):
-    input_array = np.array([[data.sepal_length, data.sepal_width,
-                             data.petal_length, data.petal_width]])
+@app.post("/predict", response_model=PredictionResponse)
+async def predict(data : InputData):
+    input_array = np.array([[data.feature_1, data.feature_2, data.feature_3, data.feature_4]])
     prediction = model.predict(input_array)[0]
-    return {'prediction' : int(prediction)}
+    confidence = model.predict_proba(input_array).max()
+    return PredictionResponse(prediction=prediction, confidence=confidence)
 
  
 
