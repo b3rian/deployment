@@ -1,8 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Cookie, Header
 import pandas as pd
 import joblib
 from pydantic import BaseModel, Field
 import numpy as np
+from typing import Annotated, Optional
 
 app = FastAPI() 
 model = joblib.load('model.pkl') # loading the trained model
@@ -14,7 +15,7 @@ class InputData(BaseModel):
     petal_length: float = Field(..., gt = 0)
 
 @app.post('/predict/')
-async def predict(data : InputData):
+async def predict(data : InputData, user_agent : Annotated[str, Header()] = None):
     input_array = np.array([[data.sepal_length, data.sepal_width,
                              data.petal_length, data.petal_width]])
     prediction = model.predict(input_array)[0]
