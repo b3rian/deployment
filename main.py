@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Cookie, Header
+from fastapi import FastAPI, Cookie, Header, HttpException
 import pandas as pd
 import joblib
 from pydantic import BaseModel, Field
@@ -22,10 +22,16 @@ class PredictionResponse(BaseModel):
 
 @app.post("/predict", response_model=PredictionResponse)
 async def predict(data : InputData):
+  try:
+    # Convert input data to a numpy array for prediction
     input_array = np.array([[data.feature_1, data.feature_2, data.feature_3, data.feature_4]])
     prediction = model.predict(input_array)[0]
     confidence = model.predict_proba(input_array).max()
     return PredictionResponse(prediction=prediction, confidence=confidence)
+
+  except Exception as e:
+    raise HttpException(status_code=500, detail=str(e))
+
 
  
 
