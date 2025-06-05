@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 import numpy as np
 from typing import Annotated, Optional
 
-app = FastAPI() 
+app = FastAPI() # App instance
 model = joblib.load('model.pkl') # loading the trained model
 
 # Define the request model
