@@ -1,0 +1,17 @@
+name: Hello Workflow  # Name of the workflow (shows up in GitHub UI)
+
+on:
+  push:               # Trigger: Run this workflow every time you push code
+    branches:
+      - main          # Only run when pushing to the main branch
+
+jobs:
+  say-hello:          # A job name you choose
+    runs-on: ubuntu-latest  # GitHub provides a VM to run this on
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4  # Pulls your repo code into the runner
+
+      - name: Print Hello Message
+        run: echo "Hello, GitHub Actions!"  # A simple shell command
