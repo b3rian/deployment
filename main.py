@@ -1,12 +1,25 @@
-from fastapi import FastAPI, Cookie, Header, HttpException, status
+from fastapi import FastAPI, Cookie, Header, HttpException, status, Request
 import pandas as pd
 import joblib
+import time
 from pydantic import BaseModel, Field
 import numpy as np
 from typing import Annotated, Optional
 
 app = FastAPI() # App instance
 model = joblib.load('model.pkl') # loading the trained model
+
+@app.middleware('http')
+async def log_and_time_requests(request: Request, call_next):
+    start_time = time.time()
+    print(f"Received request at: {request.url}")
+    
+    response = await call_next(request)
+    
+    duration = time.time() - start_time
+    print(f"Processed in {duration:.4f} seconds")
+    
+    return response
 
 # Define the request model
 class InputData(BaseModel):
