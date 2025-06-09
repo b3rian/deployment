@@ -29,8 +29,11 @@ async def predict(data : InputData):
     confidence = model.predict_proba(input_array).max()
     return PredictionResponse(prediction=prediction, confidence=confidence)
 
+  except ValueError as e:
+    raise HttpException(status_code = 400, detail = str(e))
+  
   except Exception as e:
-    raise HttpException(status_code=500, detail=str(e))
+    raise HttpException(status_code=500, detail = 'Internal Server Error')
 
 
  
