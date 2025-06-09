@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Cookie, Header, HttpException
+from fastapi import FastAPI, Cookie, Header, HttpException, status
 import pandas as pd
 import joblib
 from pydantic import BaseModel, Field
@@ -20,7 +20,7 @@ class PredictionResponse(BaseModel):
     prediction: int = Field(..., description="Predicted class label")
     confidence: float = Field(..., description="Confidence score of the prediction")
 
-@app.post("/predict", response_model=PredictionResponse)
+@app.post("/predict", response_model=PredictionResponse, status_code = status.HTTP_201_CREATED)
 async def predict(data : InputData):
   try:
     # Convert input data to a numpy array for prediction
