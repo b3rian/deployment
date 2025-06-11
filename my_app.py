@@ -86,7 +86,7 @@ elif page == "Upload/Download Data":
 # Page: About
 elif page == "About":
     st.title("📘 About This App")
-    st.markdown("""
+    st.markdown ("""
         This Personal Budget Tracker helps you:
         - Add and categorize income & expenses
         - Visualize spending trends
