@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Cookie, Header, HttpException, status, Request
+from fastapi import FastAPI, Cookie, Header, HttpException, status, Request, BackgroundTasks
 import pandas as pd
 import joblib
 from fastapi.middleware.cors import CORSMiddleware
@@ -47,13 +47,19 @@ class PredictionResponse(BaseModel):
     prediction: int = Field(..., description="Predicted class label")
     confidence: float = Field(..., description="Confidence score of the prediction")
 
+def log_prediction(data: dict, prediction: float):
+    with open ("predictions_log.txt", "a") as f:
+        log = f"{datetime.datetime.now()} - Input: {data} - Prediction: {prediction}\n"
+        f.write(log)
+
 @app.post("/predict", response_model=PredictionResponse, status_code = status.HTTP_201_CREATED)
-async def predict(data : InputData):
+async def predict(data : InputData, background_tasks: BackgroundTasks):
   try:
     # Convert input data to a numpy array for prediction
     input_array = np.array([[data.feature_1, data.feature_2, data.feature_3, data.feature_4]])
     prediction = model.predict(input_array)[0]
     confidence = model.predict_proba(input_array).max()
+    background_tasks.add_task(log_prediction, input_array, prediction, confidence)
     return PredictionResponse(prediction=prediction, confidence=confidence)
 
   except ValueError as e:
