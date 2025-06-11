@@ -39,6 +39,22 @@ if uploaded_file:
         st.write("**Summary statistics**")
         st.write(df.describe())
 
+st.subheader("🧹 Filter the Dataset")
+
+filter_columns = st.multiselect("Select columns to filter by:", df.columns)
+
+for col in filter_columns:
+    if df[col].dtype == 'object':
+        options = df[col].unique()
+        selected = st.multiselect(f"Values for {col}:", options, default=list(options))
+        df = df[df[col].isin(selected)]
+    else:
+        min_val, max_val = float(df[col].min()), float(df[col].max())
+        selected = st.slider(f"Range for {col}:", min_val, max_val, (min_val, max_val))
+        df = df[(df[col] >= selected[0]) & (df[col] <= selected[1])]
+
+st.write("### Filtered Data")
+st.dataframe(df)
 
    
      
