@@ -7,6 +7,7 @@ import time
 from typing import Annotated, Optional
 
 app = FastAPI() # App instance
+
 model = joblib.load('model.pkl') # loading the trained model
 
 origins = [
