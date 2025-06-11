@@ -89,7 +89,20 @@ if chart_type:
         fig = px.line(df, x=x_axis, y=y_axis)
         st.plotly_chart(fig)
  
-     
+st.subheader("⬇️ Download Filtered Data")
+
+@st.cache_data
+def convert_df_to_csv(dataframe):
+    return dataframe.to_csv(index=False).encode("utf-8")
+
+csv_data = convert_df_to_csv(df)
+st.download_button(
+    label="Download CSV",
+    data=csv_data,
+    file_name="filtered_data.csv",
+    mime="text/csv",
+)
+  
 
 
  
