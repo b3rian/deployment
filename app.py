@@ -56,7 +56,39 @@ for col in filter_columns:
 st.write("### Filtered Data")
 st.dataframe(df)
 
-   
+st.subheader("📈 Data Visualization")
+
+chart_type = st.selectbox("Choose chart type", ["Scatter Plot", "Histogram", "Box Plot", "Line Chart"])
+
+if chart_type:
+    numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
+    categorical_cols = df.select_dtypes(include=['object']).columns
+
+    if chart_type == "Scatter Plot":
+        x_axis = st.selectbox("X-axis", numeric_cols)
+        y_axis = st.selectbox("Y-axis", numeric_cols)
+        color = st.selectbox("Color by (optional)", [None] + list(categorical_cols))
+        fig = px.scatter(df, x=x_axis, y=y_axis, color=color)
+        st.plotly_chart(fig)
+
+    elif chart_type == "Histogram":
+        col = st.selectbox("Column", numeric_cols)
+        bins = st.slider("Number of bins", 5, 100, 30)
+        fig = px.histogram(df, x=col, nbins=bins)
+        st.plotly_chart(fig)
+
+    elif chart_type == "Box Plot":
+        y_axis = st.selectbox("Y-axis", numeric_cols)
+        x_axis = st.selectbox("X-axis (categorical)", categorical_cols)
+        fig = px.box(df, x=x_axis, y=y_axis)
+        st.plotly_chart(fig)
+
+    elif chart_type == "Line Chart":
+        x_axis = st.selectbox("X-axis", numeric_cols)
+        y_axis = st.selectbox("Y-axis", numeric_cols)
+        fig = px.line(df, x=x_axis, y=y_axis)
+        st.plotly_chart(fig)
+ 
      
 
 
