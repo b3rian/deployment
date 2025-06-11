@@ -20,6 +20,25 @@ if uploaded_file:
 else:
     st.warning("Please upload a file to get started.")
 
+if uploaded_file:
+    st.subheader("🔍 Dataset Overview")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.write("**Shape of dataset**")
+        st.write(df.shape)
+
+        st.write("**Column types**")
+        st.write(df.dtypes)
+
+    with col2:
+        st.write("**Missing values**")
+        st.write(df.isnull().sum())
+
+        st.write("**Summary statistics**")
+        st.write(df.describe())
+
 
    
      
