@@ -1,13 +1,27 @@
 from fastapi import FastAPI, Cookie, Header, HttpException, status, Request
 import pandas as pd
 import joblib
-import time
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 import numpy as np
 from typing import Annotated, Optional
 
 app = FastAPI() # App instance
 model = joblib.load('model.pkl') # loading the trained model
+
+origins = [
+    "http://localhost:3000",  # React, Vue, or any frontend server
+    "https://yourdomain.com",  # Production frontend domain
+]
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # allow all with ["*"] for dev
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.middleware('http')
 async def log_and_time_requests(request: Request, call_next):
