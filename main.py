@@ -1,19 +1,16 @@
-from pydantic import BaseModel, Field
- 
-class WeatherRequest(BaseModel):
-    city: str
+from fastapi import FastAPI, HTTPException
+from models import WeatherRequest, WeatherResponse
+from weather_service import get_weather
 
-class WeatherResponse(BaseModel):
-    city: str
-    description: str
-    temperature: float
-    feels_like: float
-    humidity: int
+app = FastAPI(title="Weather Forecast API")
 
- 
+@app.get("/")
+def root():
+    return {"message": "Welcome to the Weather Forecast API!"}
 
-
- 
-
-
- 
+@app.post("/weather", response_model=WeatherResponse)
+async def fetch_weather(request: WeatherRequest):
+    weather = await get_weather(request.city)
+    if "error" in weather:
+        raise HTTPException(status_code=404, detail=weather["error"])
+    return weather
