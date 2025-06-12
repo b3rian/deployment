@@ -6,8 +6,21 @@ from pydantic import BaseModel, Field
 import time
 from typing import Annotated, Optional
 
- 
-]
+app = FastAPI()
+
+from pydantic import BaseModel
+
+# models with pydantic
+class WeatherRequest(BaseModel):
+    city: str
+
+class WeatherResponse(BaseModel):
+    city: str
+    description: str
+    temperature: float
+    feels_like: float
+    humidity: int
+
  
 
 
