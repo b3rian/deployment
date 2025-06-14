@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field
 class WeatherRequest(BaseModel):
     city: str
 
+# Api response model
 class WeatherResponse(BaseModel):
     city: str
     description: str
