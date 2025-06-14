@@ -10,6 +10,7 @@ app = FastAPI(title="Weather Forecast API")
 def root():
     return {"message": "Welcome to the Weather Forecast API!"}
 
+# Endpoint to fetch weather data
 @app.post("/weather", response_model=WeatherResponse)
 async def fetch_weather(request: WeatherRequest):
     weather = await get_weather(request.city)
