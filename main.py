@@ -3,7 +3,7 @@ from models import WeatherRequest, WeatherResponse
 from weather_service import get_weather
 
 # FastAPI application setup
-app = FastAPI(title="Weather Forecast API")
+app = FastAPI(title = "Weather Forecast API")
 
 # Root endpoint
 @app.get("/")
