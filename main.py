@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from models import WeatherRequest, WeatherResponse
 from weather_service import get_weather
 
+# FastAPI application setup
 app = FastAPI(title="Weather Forecast API")
 
 @app.get("/")
