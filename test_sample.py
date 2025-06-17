@@ -1,11 +1,15 @@
 import pytest
 
-@pytest.fixture(params=[1, 2, 3])
-def number(request):
+@pytest.fixture(params=[1, 2])
+def x(request):
     return request.param
 
-def test_is_positive(number):
-    assert number > 0
+@pytest.fixture(params=[10, 20])
+def y(request):
+    return request.param
+
+def test_multiplication(x, y):
+    assert x * y >= 10
 
 
     
