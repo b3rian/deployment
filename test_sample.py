@@ -1,18 +1,9 @@
-def login(username, password):
-    if username == 'Admin' and password == 'Secret':
-        return 'Login succesful'
-    return 'Invalid Credetianls'
+import pytest
 
-def test_user_registration():
-    # Arrange
-    user_data = {"username": "john", "email": "john@example.com"}
-    db = InMemoryDatabase()
+@pytest.fixture
+def sample_data():
+    return [1,2,3]
 
-    # Act
-    db.register_user(user_data)
-
-    # Assert
-    assert db.get_user("john")["email"] == "john@example.com"
-
-    # Cleanup
-    db.delete_user("john")  # optional in real pytest since each test should be isolated
+def test_sum(sample_data):
+    assert sum(sample_data) == 6
+    
