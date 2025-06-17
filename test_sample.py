@@ -1,11 +1,11 @@
 import pytest
 
-@pytest.mark.parametrize("input_val,expected", [
-    (2, 4),
-    (3, 9),
-    (4, 16),
-])
-def test_square(input_val, expected):
-    assert input_val ** 2 == expected
+@pytest.fixture(params=[1, 2, 3])
+def number(request):
+    return request.param
+
+def test_is_positive(number):
+    assert number > 0
+
 
     
